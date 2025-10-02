@@ -29,11 +29,13 @@ module "api-gateway" {
 }
 
 module "ecs" {
-  source             = "./modules/ecs"
-  vpc_id             = module.vpc.vpc_id
-  ecs_subnet_ids     = module.vpc.ecs_subnet_ids
-  target_group_arn   = module.api-gateway.target_group_arn
-  ecr_repository_url = module.ecr.repository_url
+  source                   = "./modules/ecs"
+  vpc_id                   = module.vpc.vpc_id
+  ecs_subnet_ids           = module.vpc.ecs_subnet_ids
+  target_group_arn         = module.api-gateway.target_group_arn
+  ecr_repository_url       = module.ecr.repository_url
+  namespace                = var.namespace
+  cloud_map_namespace_name = var.cloud_map_namespace_name
 }
 
 resource "aws_security_group_rule" "allow_vpc_link_to_ecs" {

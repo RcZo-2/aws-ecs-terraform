@@ -33,3 +33,15 @@ variable "ecr_repository_name" {
   type        = string
   default     = "my-app"
 }
+
+variable "namespace" {
+  description = "The namespace to use for all resources"
+  type        = string
+  default     = "my-namespace"
+}
+
+variable "cloud_map_namespace_name" {
+  description = "The name of the Cloud Map namespace"
+  type        = string
+  default     = "my-cloud-map-namespace"
+}
