@@ -72,6 +72,8 @@ resource "aws_subnet" "ecs" {
   tags = {
     Name = "ecs-subnet-${each.key}"
   }
+
+  depends_on = [aws_vpc_ipv4_cidr_block_association.secondary]
 }
 
 # Create Internet Gateway
