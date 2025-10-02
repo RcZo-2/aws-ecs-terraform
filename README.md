@@ -100,3 +100,32 @@ To securely expose the ECS service to the internet, an API Gateway is used as th
 *   **Private Image Storage:** An Amazon ECR (Elastic Container Registry) repository is used to securely store and manage the private container images for the ECS service.
 *   **VPC Endpoints:** VPC endpoints for ECR and S3 are deployed in the VPC. This allows the ECS tasks to pull container images from the private ECR repository over the private AWS network, without requiring any internet access.
 *   **IAM Permissions:** The ECS task execution role is granted the necessary IAM permissions to pull images from the private ECR repository.
+
+## Deployment Strategy
+
+This project follows a two-phase approach for setup and deployment, separating infrastructure provisioning from application deployment.
+
+### 1. Infrastructure Provisioning (Terraform)
+
+The foundational cloud infrastructure is managed declaratively using Terraform. The configuration is located in the `Infra/` directory.
+
+Running `terraform apply` in this directory will provision all the necessary AWS resources, including:
+*   VPC, Subnets, and Networking components
+*   ECR Repository for container images
+*   ECS Cluster
+*   API Gateway with a VPC Link
+*   Network Load Balancer (NLB) and Target Group
+*   Cognito User Pool for authentication
+*   Necessary IAM Roles and Security Groups
+
+This approach ensures that the core infrastructure is stable, version-controlled, and can be reproduced consistently.
+
+### 2. Application Deployment (`Apps/deploy.sh`)
+
+Application deployment is handled by the `Apps/deploy.sh` script, which automates the Continuous Deployment (CD) process. This script is responsible for:
+
+1.  **Building the Docker Image:** Compiling the application and packaging it into a Docker image.
+2.  **Pushing to ECR:** Tagging the new image and pushing it to the ECR repository created by Terraform.
+3.  **Deploying the ECS Service:** Creating or updating the ECS Task Definition with the new image tag and then deploying it as an ECS Service. The script uses the `target_group_arn` output from the Terraform state to associate the service with the Network Load Balancer.
+
+This separation allows developers to deploy new versions of the application frequently and automatically without needing to modify the underlying infrastructure.

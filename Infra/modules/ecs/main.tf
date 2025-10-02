@@ -66,8 +66,4 @@ resource "aws_service_discovery_service" "main" {
     }
   }
 
-  health_check_config {
-    failure_threshold = 1
-    type              = "HTTP"
-  }
 }
