@@ -35,6 +35,7 @@ module "api-gateway" {
   ecs_subnet_ids        = module.vpc.ecs_subnet_ids
   ecs_security_group_id = module.ecs.ecs_security_group_id
   cognito_user_pool_id  = module.cognito.user_pool_id
+  aws_region            = var.aws_region
 }
 
 module "ecs" {

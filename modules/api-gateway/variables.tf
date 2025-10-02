@@ -17,3 +17,8 @@ variable "cognito_user_pool_id" {
   description = "The ID of the Cognito User Pool"
   type        = string
 }
+
+variable "aws_region" {
+  description = "The AWS region"
+  type        = string
+}
