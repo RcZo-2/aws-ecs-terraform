@@ -5,15 +5,15 @@ output "vpc_id" {
 
 output "public_subnet_ids" {
   description = "List of IDs of public subnets"
-  value       = aws_subnet.public[*].id
+  value       = [for s in aws_subnet.public : s.id]
 }
 
 output "private_subnet_ids" {
   description = "List of IDs of private subnets"
-  value       = aws_subnet.private[*].id
+  value       = [for s in aws_subnet.private : s.id]
 }
 
 output "ecs_subnet_ids" {
   description = "List of IDs of ECS subnets"
-  value       = aws_subnet.ecs[*].id
+  value       = [for s in aws_subnet.ecs : s.id]
 }
