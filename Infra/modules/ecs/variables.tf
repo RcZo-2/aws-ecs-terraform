@@ -8,10 +8,6 @@ variable "ecs_subnet_ids" {
   type        = list(string)
 }
 
-variable "target_group_arn" {
-  description = "The ARN of the NLB target group"
-  type        = string
-}
 
 variable "ecr_repository_url" {
   description = "The URL of the ECR repository"

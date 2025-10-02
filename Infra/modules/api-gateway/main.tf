@@ -54,15 +54,6 @@ resource "aws_apigatewayv2_api" "http" {
   protocol_type = "HTTP"
 }
 
-# Create an integration for the API Gateway
-resource "aws_apigatewayv2_integration" "ecs" {
-  api_id           = aws_apigatewayv2_api.http.id
-  integration_type = "HTTP_PROXY"
-  integration_uri  = aws_lb_listener.ecs.arn
-  connection_type  = "VPC_LINK"
-  connection_id    = aws_apigatewayv2_vpc_link.ecs.id
-}
-
 # Create a Cognito authorizer for the API Gateway
 resource "aws_apigatewayv2_authorizer" "cognito" {
   api_id           = aws_apigatewayv2_api.http.id
@@ -74,20 +65,4 @@ resource "aws_apigatewayv2_authorizer" "cognito" {
     audience = [var.cognito_user_pool_id]
     issuer   = "https://cognito-idp.${var.aws_region}.amazonaws.com/${var.cognito_user_pool_id}"
   }
-}
-
-# Create a route for the API Gateway
-resource "aws_apigatewayv2_route" "ecs" {
-  api_id    = aws_apigatewayv2_api.http.id
-  route_key = "ANY /{proxy+}"
-  target    = "integrations/${aws_apigatewayv2_integration.ecs.id}"
-  authorization_type = "JWT"
-  authorizer_id = aws_apigatewayv2_authorizer.cognito.id
-}
-
-# Create a stage for the API Gateway
-resource "aws_apigatewayv2_stage" "default" {
-  api_id      = aws_apigatewayv2_api.http.id
-  name        = "$default"
-  auto_deploy = true
 }
