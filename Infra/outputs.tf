@@ -1,4 +1,4 @@
-output "api_endpoint" {
-  description = "The endpoint of the API Gateway"
-  value       = module.api-gateway.api_endpoint
+output "target_group_arn" {
+  description = "The ARN of the API Gateway's target group"
+  value       = module.api-gateway.target_group_arn
 }
