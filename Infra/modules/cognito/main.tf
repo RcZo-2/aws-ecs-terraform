@@ -1,5 +1,6 @@
 resource "aws_cognito_user_pool" "pool" {
-  name = "api-user-pool"
+  name           = "api-user-pool"
+  user_pool_tier = "LITE"
 }
 
 resource "aws_cognito_user_pool_client" "client" {

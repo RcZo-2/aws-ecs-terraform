@@ -67,3 +67,10 @@ resource "aws_service_discovery_service" "main" {
   }
 
 }
+
+# Create a CloudWatch log group for the ECS service
+resource "aws_cloudwatch_log_group" "ecs" {
+  name              = "/ecs/${var.namespace}"
+  retention_in_days = 30
+  tags              = var.tags
+}

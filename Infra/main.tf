@@ -47,11 +47,11 @@ module "ecs" {
   cloud_map_namespace_name = var.cloud_map_namespace_name
 }
 
-resource "aws_security_group_rule" "allow_vpc_link_to_ecs" {
-  type                     = "ingress"
-  from_port                = 80
-  to_port                  = 80
-  protocol                 = "tcp"
-  source_security_group_id = module.api-gateway.vpc_link_security_group_id
-  security_group_id        = module.ecs.ecs_security_group_id
+resource "aws_security_group_rule" "allow_alb_to_ecs" {
+  type              = "ingress"
+  from_port         = 80
+  to_port           = 80
+  protocol          = "tcp"
+  security_group_id = module.ecs.ecs_security_group_id
+  self              = true
 }
