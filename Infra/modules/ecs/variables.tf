@@ -8,12 +8,6 @@ variable "ecs_subnet_ids" {
   type        = list(string)
 }
 
-
-variable "ecr_repository_url" {
-  description = "The URL of the ECR repository"
-  type        = string
-}
-
 variable "namespace" {
   description = "The namespace to use for all resources"
   type        = string

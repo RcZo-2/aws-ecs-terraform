@@ -20,11 +20,6 @@ module "vpc" {
   availability_zones     = var.availability_zones
 }
 
-module "ecr" {
-  source              = "./modules/ecr"
-  ecr_repository_name = var.ecr_repository_name
-}
-
 module "cognito" {
   source = "./modules/cognito"
 }
@@ -38,11 +33,15 @@ module "api-gateway" {
   aws_region            = var.aws_region
 }
 
+module "ecr" {
+  source          = "./modules/ecr"
+  repository_name = var.ecr_repository_name
+}
+
 module "ecs" {
   source                   = "./modules/ecs"
   vpc_id                   = module.vpc.vpc_id
   ecs_subnet_ids           = module.vpc.ecs_subnet_ids
-  ecr_repository_url       = module.ecr.repository_url
   namespace                = var.namespace
   cloud_map_namespace_name = var.cloud_map_namespace_name
 }

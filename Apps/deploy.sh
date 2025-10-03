@@ -7,7 +7,22 @@ set -e
 # These would typically be passed in from a CI/CD pipeline
 export AWS_REGION=${AWS_REGION:-"us-east-2"}
 export NAMESPACE=${NAMESPACE:-"my-app"}
-export ECR_REPOSITORY_URL=$(cd ../Infra && terraform output -json ecr_repository_url | jq -r .)
+export ECR_REPOSITORY_NAME=${NAMESPACE}
+export AWS_ACCOUNT_ID=$(aws sts get-caller-identity --query Account --output text)
+export ECR_REPOSITORY_URL="${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com/${ECR_REPOSITORY_NAME}"
+
+# Create ECR repository if it doesn't exist
+echo "Checking for ECR repository..."
+if ! aws ecr describe-repositories --repository-names "${ECR_REPOSITORY_NAME}" --region "${AWS_REGION}" > /dev/null 2>&1; then
+  echo "Creating ECR repository '${ECR_REPOSITORY_NAME}'..."
+  aws ecr create-repository \
+    --repository-name "${ECR_REPOSITORY_NAME}" \
+    --image-scanning-configuration scanOnPush=false \
+    --region "${AWS_REGION}" > /dev/null
+else
+  echo "ECR repository '${ECR_REPOSITORY_NAME}' already exists."
+fi
+
 export ECS_CLUSTER_ID=$(cd ../Infra && terraform output -json ecs_cluster_id | jq -r .)
 export ECS_SUBNET_IDS=$(cd ../Infra && terraform output -json ecs_subnet_ids | jq -r 'join(",")')
 export ECS_SECURITY_GROUP_ID=$(cd ../Infra && terraform output -json ecs_security_group_id | jq -r .)

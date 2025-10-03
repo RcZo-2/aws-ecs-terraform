@@ -1,15 +1,10 @@
-output "ecr_repository_url" {
-  description = "The URL of the ECR repository"
-  value       = module.ecr.repository_url
-}
-
 output "ecs_cluster_id" {
   description = "The ID of the ECS cluster"
   value       = module.ecs.ecs_cluster_id
 }
 
 output "ecs_subnet_ids" {
-  description = "The IDs of the ECS subnets"
+  description = "List of IDs of ECS subnets"
   value       = module.vpc.ecs_subnet_ids
 }
 
@@ -19,7 +14,7 @@ output "ecs_security_group_id" {
 }
 
 output "target_group_arn" {
-  description = "The ARN of the API Gateway's target group"
+  description = "The ARN of the ALB target group"
   value       = module.api-gateway.target_group_arn
 }
 
@@ -39,7 +34,7 @@ output "alb_listener_arn" {
 }
 
 output "vpc_link_id" {
-  description = "The ID of the VPC Link"
+  description = "The ID of the VPC link"
   value       = module.api-gateway.vpc_link_id
 }
 
